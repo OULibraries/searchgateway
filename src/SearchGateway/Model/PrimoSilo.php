@@ -30,6 +30,7 @@ Class PrimoSilo extends Silo {
 	$primoQuery['apikey'] = $global_primo_key;
 	$primoQuery['vid'] = 'OU';
 	$primoQuery['scope'] = 'default_scope';
+	$primoQuery['addfields'] =['pnxId'];
 
 	$primoResponse = $client->send($primoRequest);
 	$primoJson = $primoResponse->json();
@@ -41,7 +42,7 @@ Class PrimoSilo extends Silo {
 	foreach ($primoJson['docs'] as $docs) {
 	    $row = new \stdClass();
 	    $row->title = $docs['title'];
-	    $row->link  = $docs['delivery']['GetIt1'][0]['links'][0]['link'];
+	    $row->link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
 	    $myResult->hits[] = $row;
 	}
 
