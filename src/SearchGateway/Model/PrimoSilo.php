@@ -11,7 +11,7 @@ Class PrimoSilo extends Silo {
     public function getResult ( $query, $limit) {
 	global $global_primo_uri, $global_primo_key;
 
-       	
+
 	$myResult = new Result();
 	$myResult->source = "primo";
 	$myResult->query = $query;
@@ -21,12 +21,16 @@ Class PrimoSilo extends Silo {
 	$jar = new \GuzzleHttp\Cookie\CookieJar();
 
 	# Do primo search
+	# See API docs
+	# https://developers.exlibrisgroup.com/primo/apis/webservices/rest/pnxs
 	$primoRequest = $client->createRequest('GET', $global_primo_uri);
 	$primoQuery = $primoRequest->getQuery();
 	$primoQuery['q'] = 'any,contains,' . $query;
 	$primoQuery['limit'] = $limit;
 	$primoQuery['apikey'] = $global_primo_key;
-	$primoQuery['loc'] = "adaptor,primo_central_multiple_fe";
+	$primoQuery['vid'] = 'OU';
+	$primoQuery['scope'] = 'default_scope';
+
 	$primoResponse = $client->send($primoRequest);
 	$primoJson = $primoResponse->json();
 
