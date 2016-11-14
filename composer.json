@@ -3,5 +3,11 @@
         "silex/silex": "~2.0",
         "guzzlehttp/guzzle": "~5.0",
         "twig/twig": "^1.27"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "SearchGateway\\Model\\": "src/SearchGateway/Model/"
+        }
     }
 }

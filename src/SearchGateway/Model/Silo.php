@@ -1,5 +1,7 @@
 <?php
 
+namespace SearchGateway\Model;
+
   /* Base clase for search Silos. 
 
    */
@@ -11,8 +13,10 @@ Class Silo  {
 	;
     }
 
-    public function( $query, $limit) find {
+    public function getResult ( $query, $limit){
 	;
     }
 
 }
+
+
