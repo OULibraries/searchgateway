@@ -31,9 +31,10 @@ function searchController( Request $request){
 
 
 
-    /*  Return Result as Jason 
+    /*  Return error or Result as enveloped JSON 
      */
     $out = [];
+    $out['data'] = [];
     return new Response( json_encode($out) );
 }
 
