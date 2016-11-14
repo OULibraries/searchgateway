@@ -7,7 +7,7 @@ Class Result {
     public $source ="";
     public $query ="";
     public $full ="";
-    public $hits = q[];
+    public $hits = [];
     public $total =0 ;
 
 
