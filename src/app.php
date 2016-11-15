@@ -4,7 +4,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../config/secrets.php';
 
 
-
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +13,10 @@ $app = new Application;
 $app['debug'] = true;
 
 function searchController( Request $request){
+
+    global $conf;
+    // glocal configuration var.  probably should get replaced with $app
+    // pimple when we learn how that works a little better.
     
     /* Process incoming query 
      */
@@ -22,29 +25,19 @@ function searchController( Request $request){
     $needle = $params["q"];  // query needle
     $limit  = $params["n"];  // number of results requested
     
-    /* 
-     *  Determine appropriate Silo for search. Ideally, we'll
-     *  eventually do something clever so that we don't have to
-     *  bootstrap a Silo option whenever we run a query.
-     */
-
-
     switch ($api) {
     case "primo":
-	$mySearchApi = new SearchGateway\Model\PrimoSilo();
+	$mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key']);
         break;
-    case "libanswers":
-	$mySearchApi = new SearchGateway\Model\LibAnswersSilo();
+    case "libguides":
+	$mySearchApi = new SearchGateway\Model\LibGuidesSilo($conf['libguides_siteid'], $conf['libguides_key']);
         break;
     }
-    
-
 
     /*
      *  Get Result from Silo. 
      */
     $mySearch  = $mySearchApi->getResult($needle, $limit);
-	
 
     /*  Return error or Result as enveloped JSON 
      */
