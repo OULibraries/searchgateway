@@ -10,7 +10,10 @@ namespace SearchGateway\Model;
 Class Silo  {
 
     public function __construct() {
-	;
+
+	# Setup web client
+	$this->client = new \GuzzleHttp\Client();
+	$this->jar = new \GuzzleHttp\Cookie\CookieJar();
     }
 
     public function getResult ( $query, $limit){

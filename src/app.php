@@ -2,9 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../config/secrets.php';
-
-
-
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,13 +25,15 @@ function searchController( Request $request){
      *  bootstrap a Silo option whenever we run a query.
      */
 
+    global $global_primo_host, $global_primo_key, $global_libguides_siteid, $global_libguides_key;
+
 
     switch ($api) {
     case "primo":
-	$mySearchApi = new SearchGateway\Model\PrimoSilo();
+	$mySearchApi = new SearchGateway\Model\PrimoSilo($global_primo_host, $global_primo_key);
         break;
-    case "libanswers":
-	$mySearchApi = new SearchGateway\Model\LibAnswersSilo();
+    case "libguides":
+	$mySearchApi = new SearchGateway\Model\LibGuidesSilo($global_libguides_siteid, $global_libguides_key);
         break;
     }
     

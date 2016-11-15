@@ -4,39 +4,33 @@ namespace SearchGateway\Model;
 
 Class PrimoSilo extends Silo {
 
-    public function __construct() {
-	;
+    public function __construct( $primoHost, $primoKey) {
+	parent::__construct();
+	$this->primoHost=$primoHost;
+	$this->primoKey =$primoKey;
     }
 
     public function getResult ( $query, $limit) {
-	// TODO these will get factored into the constructor once we've fleshed out the base class more.
-	// TODO maybe with other OU specific stuff?
-	// TODO still need to figure out books-only and journals-only searches
-	global $global_primo_uri, $global_primo_key; 
-
 
 	$myResult = new Result();
 	$myResult->source = "primo";
 	$myResult->query = $query;
 	$myResult->full = "http://link-to-full-search-tbd";
 
-	# Setup web client
-	$client = new \GuzzleHttp\Client();
-	$jar = new \GuzzleHttp\Cookie\CookieJar();
 
 	# Do primo search
 	# See API docs
 	# https://developers.exlibrisgroup.com/primo/apis/webservices/rest/pnxs
-	$primoRequest = $client->createRequest('GET', $global_primo_uri);
+	$primoRequest = $this->client->createRequest('GET', $this->primoHost."/primo/v1/pnxs");
 	$primoQuery = $primoRequest->getQuery();
 	$primoQuery['q'] = 'any,contains,' . $query;
 	$primoQuery['limit'] = $limit;
-	$primoQuery['apikey'] = $global_primo_key;
+	$primoQuery['apikey'] = $this->primoKey;
 	$primoQuery['vid'] = 'OU';
 	$primoQuery['scope'] = 'default_scope';
 	$primoQuery['addfields'] =['pnxId'];
 
-	$primoResponse = $client->send($primoRequest);
+	$primoResponse = $this->client->send($primoRequest);
 	$primoJson = $primoResponse->json();
 
 	# How many hits did we get?
