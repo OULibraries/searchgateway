@@ -47,6 +47,7 @@ Class PrimoSilo extends Silo {
 	    $row = new \stdClass();
 	    $row->title = $docs['title'];
 	    $row->link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
+	    $row->description  = ""; // no good source for description known 
 	    $myResult->hits[] = $row;
 	}
 

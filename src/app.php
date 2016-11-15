@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 $app = new Application;
+$app['debug'] = true;
 
 function searchController( Request $request){
     
@@ -27,7 +28,16 @@ function searchController( Request $request){
      *  bootstrap a Silo option whenever we run a query.
      */
 
-    $mySearchApi = new SearchGateway\Model\PrimoSilo();
+
+    switch ($api) {
+    case "primo":
+	$mySearchApi = new SearchGateway\Model\PrimoSilo();
+        break;
+    case "libanswers":
+	$mySearchApi = new SearchGateway\Model\LibAnswersSilo();
+        break;
+    }
+    
 
 
     /*
