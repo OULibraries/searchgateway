@@ -1,12 +1,11 @@
 <?php
-
 namespace SearchGateway\Model;
-
-  /* 
-   *Base clase for search Silos. 
-   */
-
-
+/**
+ * Silo -  base clase for search backend interfaces
+ *
+ * Each search backend should be defined as a subclass of Silo, with
+ * common functionality extracted to this base class as it emerges.
+ */
 Class Silo  {
 
     public function __construct() {

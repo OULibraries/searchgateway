@@ -17,8 +17,6 @@ Class LibGuidesSilo extends Silo {
 	$myResult->query = $query;
 	$myResult->full = "http://link-to-full-search-tbd";
 
-	
-	// libapps api
 	$request = $this->client->createRequest('GET', 'http://lgapi.libapps.com/1.1/guides');
 	$LibGuidesQuery = $request->getQuery();
 	$LibGuidesQuery['key'] = $this->key;
@@ -29,19 +27,21 @@ Class LibGuidesSilo extends Silo {
 
 	$json = $response->json();
 
-
-
+	/* This API doesn't return a total count or allow us to get a
+	   fixed number of results, so we have to get everything and
+	   manually count/limit
+	*/
 	$myResult->total = count($json);
-
         # Process hits
 	$i = 0;
 	foreach ($json as $key => $value) {
-	    $row = new \stdClass();
-	    $row->title = $value['name'];
-	    $row->link = $value['url'];
-	    $row->description = $value['description'];
-	    $myResult->hits[] = $row;
-	    if (++$i == $limit) break;
+	    if ($i++ == $limit) break;
+
+	    $my_title = $value['name'];
+	    $my_link = $value['url'];
+	    $my_description = $value['description'];
+
+	    $myResult->addHit( $my_link, $my_title, $my_description);
 	}
 	return $myResult;
     }

@@ -38,11 +38,12 @@ Class PrimoSilo extends Silo {
 
 	# Process hits
 	foreach ($primoJson['docs'] as $docs) {
-	    $row = new \stdClass();
-	    $row->title = $docs['title'];
-	    $row->link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
-	    $row->description  = ""; // no good source for description known 
-	    $myResult->hits[] = $row;
+
+	    $my_title = $docs['title'];
+	    $my_link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
+	    $my_description  = ""; // no good source for description known 
+
+	    $myResult->addHit( $my_title, $my_link, $my_description);
 	}
 
 	return $myResult;

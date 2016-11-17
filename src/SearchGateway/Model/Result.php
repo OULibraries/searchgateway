@@ -14,6 +14,11 @@ Class Result {
 	;
     }
 
+
+    /**
+     * Returns a dictionary representing a search result, suitable for
+     * feeding to a JsonResponse
+     */
     public function getData() {
 
 	$data = [];
@@ -25,6 +30,14 @@ Class Result {
 
 	return $data;
     }
+
+    public function addHit( $link, $title, $description) {
+	$this->hits[] =  [ 'link' => $link,
+			   'title' => $title,
+			   'text' => $description];
+    }
+
+    
 
 
 
