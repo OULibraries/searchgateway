@@ -43,7 +43,7 @@ Class PrimoSilo extends Silo {
 	    $my_link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
 	    $my_description  = ""; // no good source for description known 
 
-	    $myResult->addHit( $my_title, $my_link, $my_description);
+	    $myResult->addHit($my_link, $my_title, $my_description);
 	}
 
 	return $myResult;
