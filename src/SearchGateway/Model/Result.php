@@ -7,8 +7,8 @@ Class Result {
     public $source ="";
     public $query ="";
     public $full ="";
-    public $hits = []; // [{link, url, description}]
     public $total =0 ;
+    public $hits = []; // [{link, url, description}]
 
     public function __construct() {
 	;
@@ -25,8 +25,8 @@ Class Result {
 	$data["source"] = $this->source;
 	$data["query"] = $this->query;
 	$data["full"] = $this->full;
+    $data["total"] = $this->total;
 	$data["hits"] = $this->hits;
-	$data["total"] = $this->total;
 
 	return $data;
     }
