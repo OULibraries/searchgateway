@@ -1,7 +1,10 @@
 <?php
-
 namespace SearchGateway\Model;
 
+/*
+ * PrimoSilo - interface with Primo search backend. 
+ *
+ */
 Class PrimoSilo extends Silo {
 
   public function __construct($primoHost, $primoKey, $primoBook) {
@@ -11,6 +14,9 @@ Class PrimoSilo extends Silo {
     $this->primoBook = $primoBook;
   }
 
+  /*
+   * Get a Result from Primo
+   */
   public function getResult($query, $limit) {
 
     $myResult = new Result();
