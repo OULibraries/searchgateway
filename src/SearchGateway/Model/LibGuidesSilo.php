@@ -1,7 +1,9 @@
 <?php
-
 namespace SearchGateway\Model;
 
+/**
+ * LibGuidesSile - interface with LibGuides search backend. 
+ */
 Class LibGuidesSilo extends Silo {
 
     public function __construct( $siteId, $key) {
@@ -10,6 +12,9 @@ Class LibGuidesSilo extends Silo {
 	$this->key = $key;
     }
 
+    /*
+     * Get a Result from LibGuides
+     */
     public function getResult ( $query, $limit) {
 
 	$myResult = new Result();
