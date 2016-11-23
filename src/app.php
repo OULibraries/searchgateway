@@ -12,13 +12,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 $app = new Application;
 $app['debug'] = TRUE;
 
+/**
+ * Route searches to the appropriate search silo
+ */
 function searchController(Request $request) {
 
-  global $conf;
-  // glocal configuration var.  probably should get replaced with $app
-  // pimple when we learn how that works a little better.
+  global $conf; // settings from secrets.php
 
-  /* Process incoming query
+  /*
+   * Process incoming query
    */
   $params = $request->query->all();
   $api = $params["t"];     // search api to target
@@ -52,9 +54,23 @@ function searchController(Request $request) {
   return new JsonResponse($envelope);
 }
 
-/*  Basic query API
- *  http://localhost:8888/search?t=shareok&q=foobarbaz&n=10
+/*
+ * Basic query API
+ * Support queries like http://localhost:8888/search?t=primo&q=christmas&n=5
+ * or http://localhost:8888/search?t=primo&q=christmas&n=5&callback=jsonp
  */
 $app->get('/search', "searchController");
+
+
+/*
+ * Our main use case is client side, so allow for jsonp
+ */
+$app->after(function (Request $request, Response $response) {
+    if(($response instanceof JsonResponse) && $request->get('callback')) {
+        $response->setCallback($request->get('callback'));
+    }
+});
+
+
 
 $app->run();
