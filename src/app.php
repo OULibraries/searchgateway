@@ -35,7 +35,7 @@ function searchController(Request $request) {
     case "libguides":
       $mySearchApi = new SearchGateway\Model\LibGuidesSilo($conf['libguides_siteid'], $conf['libguides_key']);
       break;
-    case 'primoBook':
+    case 'primobook':
       $book = TRUE;
       $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $book);
       break;
