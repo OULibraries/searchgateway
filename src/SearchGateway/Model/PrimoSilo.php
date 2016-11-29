@@ -36,7 +36,7 @@ Class PrimoSilo extends Silo {
     $primoQuery['q'] = 'any,contains,' . $query;
     $primoQuery['limit'] = $limit;
     $primoQuery['apikey'] = $this->primoKey;
-    $primoQuery['vid'] = 'OU';
+    $primoQuery['vid'] = $this->vid;
     $primoQuery['scope'] = 'default_scope';
     $primoQuery['addfields'] = ['pnxId'];
     if ($this->primoBook) {
