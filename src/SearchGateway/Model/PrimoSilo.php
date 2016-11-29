@@ -25,7 +25,7 @@ Class PrimoSilo extends Silo {
     $myResult = new Result();
     $myResult->source = "primo";
     $myResult->query = $query;
-    $myResult->full = "ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=" . $this->vid . "&sortby=rank";
+    $myResult->full = "//ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=" . $this->vid . "&sortby=rank";
 
 
     # Do primo search
