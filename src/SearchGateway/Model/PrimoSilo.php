@@ -7,11 +7,12 @@ namespace SearchGateway\Model;
  */
 Class PrimoSilo extends Silo {
 
-  public function __construct($primoHost, $primoKey, $primoBook) {
+  public function __construct($primoHost, $primoKey, $primoBook, $vid) {
     parent::__construct();
     $this->primoHost = $primoHost;
     $this->primoKey = $primoKey;
     $this->primoBook = $primoBook;
+    $this->vid = $vid;
   }
 
   /*
@@ -24,7 +25,7 @@ Class PrimoSilo extends Silo {
     $myResult = new Result();
     $myResult->source = "primo";
     $myResult->query = $query;
-    $myResult->full = "uok-primosandbox.hosted.exlibrisgroup.com:1701/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=OU&sortby=rank";
+    $myResult->full = "ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=" . $this->vid . "&sortby=rank";
 
 
     # Do primo search
