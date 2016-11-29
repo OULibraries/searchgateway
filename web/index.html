@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+    <script scc="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.amd.js"></script>
+  </head>
+
+  <body>
+
+    <h1> Search Prototype</h1>
+
+    <form id= "searchForm">
+      <input type="text">
+      <button type="submit" >Submit!</button>
+    </form>
+
+<div>
+    <h2>Primo Book Results</h2>
+
+    <div class="primobook">
+    </div>
+</div>
+  <div>
+    <h2>LibGuides Results</h2>
+
+    <div class="libguides">
+    </div>
+</div>
+
+
+
+
+    <script id="resultTemplate" type="text">
+      <ul>
+      {{#hits}}
+      <li><p><a href="{{{link}}}">{{title}}</a></p>
+	<p>{{text}}</p>
+
+      </li>
+      {{/hits}}
+      </ul>
+
+      <p>For all {{total}} results, go to the <a href="{{full}}">search page</a>.
+    </script>
+
+    <script src="./script.js"> </script>
+  </body>
+
+</html>
