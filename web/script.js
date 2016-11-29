@@ -9,7 +9,7 @@ function displayResults(target, json){
 
 // run a search against the gateway
 function doSearch(target, needle) {
-    var myurl="http://localhost:8888/search?t="+target+"&q="+needle+"&n=10";
+    var myurl="/search?t="+target+"&q="+needle+"&n=10";
     $.ajax({
 	url: myurl,
 	dataType: "jsonp",
