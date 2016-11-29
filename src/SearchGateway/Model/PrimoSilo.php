@@ -19,10 +19,12 @@ Class PrimoSilo extends Silo {
    */
   public function getResult($query, $limit) {
 
+    $bookSearchArg = ($this->primoBook) ? ',AND&pfilter=pfilter,exact,books,AND&mode=advanced' : '';
+
     $myResult = new Result();
     $myResult->source = "primo";
     $myResult->query = $query;
-    $myResult->full = "http://link-to-full-search-tbd";
+    $myResult->full = "uok-primosandbox.hosted.exlibrisgroup.com:1701/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=OU&sortby=rank";
 
 
     # Do primo search
