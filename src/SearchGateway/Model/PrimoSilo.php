@@ -7,11 +7,12 @@ namespace SearchGateway\Model;
  */
 Class PrimoSilo extends Silo {
 
-  public function __construct($primoHost, $primoKey, $primoBook) {
+  public function __construct($primoHost, $primoKey, $primoBook, $vid) {
     parent::__construct();
     $this->primoHost = $primoHost;
     $this->primoKey = $primoKey;
     $this->primoBook = $primoBook;
+    $this->vid = $vid;
   }
 
   /*
@@ -19,10 +20,12 @@ Class PrimoSilo extends Silo {
    */
   public function getResult($query, $limit) {
 
+    $bookSearchArg = ($this->primoBook) ? ',AND&pfilter=pfilter,exact,books,AND&mode=advanced' : '';
+
     $myResult = new Result();
     $myResult->source = "primo";
     $myResult->query = $query;
-    $myResult->full = "http://link-to-full-search-tbd";
+    $myResult->full = "//ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=" . $this->vid . "&sortby=rank";
 
 
     # Do primo search
@@ -33,7 +36,7 @@ Class PrimoSilo extends Silo {
     $primoQuery['q'] = 'any,contains,' . $query;
     $primoQuery['limit'] = $limit;
     $primoQuery['apikey'] = $this->primoKey;
-    $primoQuery['vid'] = 'OU';
+    $primoQuery['vid'] = $this->vid;
     $primoQuery['scope'] = 'default_scope';
     $primoQuery['addfields'] = ['pnxId'];
     if ($this->primoBook) {

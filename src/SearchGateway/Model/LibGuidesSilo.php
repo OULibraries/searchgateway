@@ -20,7 +20,7 @@ Class LibGuidesSilo extends Silo {
 	$myResult = new Result();
 	$myResult->source = "libguides";
 	$myResult->query = $query;
-	$myResult->full = "http://link-to-full-search-tbd";
+	$myResult->full = "http://guides.ou.edu/srch.php?q=" . $query . "&t=0";
 
 	$request = $this->client->createRequest('GET', 'http://lgapi.libapps.com/1.1/guides');
 	$LibGuidesQuery = $request->getQuery();
