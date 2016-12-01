@@ -39,6 +39,7 @@ Class PrimoSilo extends Silo {
     $primoQuery['vid'] = $this->vid;
     $primoQuery['scope'] = 'default_scope';
     $primoQuery['addfields'] = ['pnxId'];
+    $primoQuery['view'] = 'full';
     if ($this->primoBook) {
       $primoQuery['qInclude'] = 'facet_rtype,exact,books';
     }
@@ -50,10 +51,11 @@ Class PrimoSilo extends Silo {
 
 	# Process hits
 	foreach ($primoJson['docs'] as $docs) {
+        $implodedSubs = (is_array($docs['subject'])) ? implode(' | ', $docs['subject']) : $docs['subject'];
 
 	    $my_title = $docs['title'];
-	    $my_link  = "http://ou-primo.hosted.exlibrisgroup.com/OU:default_scope:".$docs['pnxId'];
-	    $my_description  = ""; // no good source for description known
+	    $my_link  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid."";
+	    $my_description  = $implodedSubs; // no good source for description known
 
 	    $myResult->addHit($my_link, $my_title, $my_description);
 	}
