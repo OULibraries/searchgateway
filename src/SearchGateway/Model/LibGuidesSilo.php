@@ -24,10 +24,11 @@ Class LibGuidesSilo extends Silo {
 
 	$request = $this->client->createRequest('GET', 'http://lgapi.libapps.com/1.1/guides');
 	$LibGuidesQuery = $request->getQuery();
-	$LibGuidesQuery['key'] = $this->key;
-	$LibGuidesQuery['site_id'] = $this->siteId;
-	$LibGuidesQuery['sort_by'] = 'relevance';
-	$LibGuidesQuery['search_terms'] = $query;
+
+	$LibGuidesQuery['key'] = $this->key; //OU specific private ky
+	$LibGuidesQuery['site_id'] = $this->siteId; //the OU site ID...could change...that's why it's set as a variable
+	$LibGuidesQuery['sort_by'] = 'relevance'; //default is by date...we want to sort by relevance
+	$LibGuidesQuery['search_terms'] = $query; //the search terms
 	$response = $this->client->send($request);
 
 	$json = $response->json();
