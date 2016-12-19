@@ -23,11 +23,15 @@ function searchController(Request $request) {
    * Process incoming query
    */
   $params = $request->query->all();
-  $api = $params["t"];     // search api to target
-  $needle = $params["q"];  // query needle
-  $limit = $params["n"];  // number of results requested
+
+  $api    = isset($params["t"]) ? $params["t"] : "";     // search api to target
+  $limit  = isset($params["n"]) && ctype_digit($params["n"]) ? $params["n"] : "5";  // number of results requested
+  $needle = isset($params["q"]) ? $params["q"] : "";  // query needle
+
+  $needle = preg_replace('/[^\p{L}\p{N}]+/u', '', $needle); // strip out anything that isn't a (unicode) alphanumeric
+
   $option = 'default';
-error_log($api);
+
   switch ($api) {
     case "primo":
       $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $option, $conf['vid']);
@@ -46,6 +50,8 @@ error_log($api);
       $option = 'collection';
       $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $option, $conf['vid']);
       break;
+    default:
+        throw new Exception('No valid search!');
   }
 
   /*
@@ -67,6 +73,18 @@ error_log($api);
  * or http://localhost:8888/search?t=primo&q=christmas&n=5&callback=jsonp
  */
 $app->get('/search', "searchController");
+
+
+/*
+ * Pretend like we have error handling
+ */
+$app->error(function (Exception $e, Request $request, $code) {
+   error_log($e);
+   $envelope = [];
+   $envelope['status'] = $code;
+   $envelope['error'] = $e->getMessage();
+   return new JsonResponse($envelope);
+});
 
 
 /*
