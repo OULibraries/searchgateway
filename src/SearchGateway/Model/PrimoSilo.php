@@ -43,7 +43,7 @@ Class PrimoSilo extends Silo {
     $primoQuery['scope'] = 'default_scope'; //range of types to return...default is everything
     $primoQuery['addfields'] = ['pnxId']; //specific identifier for individual records
     $primoQuery['view'] = 'full'; //view = full will return everything...including the subject or description
-error_log($this->primoOption);
+
     #if this is 'books only' then we need to set that facet type
     switch ($this->primoOption) {
       case 'books':
@@ -65,7 +65,7 @@ error_log($this->primoOption);
         $myResult->topLabel = 'Article';
         break;
     }
-error_log($primoQuery); error_log($primoQuery['qInclude']);
+
     $primoResponse = $this->client->send($primoRequest);
     $primoJson = $primoResponse->json();
 
