@@ -7,21 +7,23 @@ namespace SearchGateway\Model;
  */
 Class PrimoSilo extends Silo {
 
-  public function __construct($primoHost, $primoKey, $primoBook, $vid) {
+  public function __construct($primoHost, $primoKey, $vid, $option) {
     parent::__construct();
     $this->primoHost = $primoHost;
     $this->primoKey = $primoKey;
-    $this->primoBook = $primoBook;
+    $this->primoOption = $option;
     $this->vid = $vid;
+    $this->collections = array();
   }
 
   /*
    * Get a Result from Primo
    */
   public function getResult($query, $limit) {
+    $this->collections = ['Bass Collection', 'Boorstin Collection'];
 
     #only set this is it is for 'books only'
-    $bookSearchArg = ($this->primoBook) ? ',AND&pfilter=pfilter,exact,books,AND&mode=advanced' : '';
+    $bookSearchArg = ($this->primoOption != 'default') ? '&mode=advanced' : '';
 
     $myResult = new Result();
     $myResult->source = "primo";
@@ -43,26 +45,49 @@ Class PrimoSilo extends Silo {
     $primoQuery['view'] = 'full'; //view = full will return everything...including the subject or description
 
     #if this is 'books only' then we need to set that facet type
-    if ($this->primoBook) {
-      $primoQuery['qInclude'] = 'facet_rtype,exact,books';
+    switch ($this->primoOption) {
+      case 'books':
+        $primoQuery['qInclude'] = 'facet_rtype,exact,books';
+        $myResult->source = "primobooks";
+        $myResult->topLabel = 'Book';
+        break;
+      case 'collection':
+        $primoQuery['qInclude'] = 'facet_local6,exact,special_collections';
+        $myResult->source = 'collection';
+        $myResult->topLabel = 'Special Collection';
+        break;
+      case 'share':
+        $primoQuery['scope'] = 'ou_dspace';
+        $myResult->source = 'share';
+        $myResult->topLabel = 'SHAREOK Article';
+        break;
+      default:
+        $myResult->topLabel = 'Article';
+        break;
     }
+
     $primoResponse = $this->client->send($primoRequest);
     $primoJson = $primoResponse->json();
 
     # How many hits did we get?
     $myResult->total = $primoJson['info']['total'];
+    $myResult->plural = $this->isPlural($myResult->total);
+
+    $sentData = array();
 
 	# Process hits
 	foreach ($primoJson['docs'] as $docs) {
-        #if there is more than one subject it is returned as an array
-        #if it is we separate each one by a vertical bar '|'
-        $implodedSubs = (is_array($docs['subject'])) ? implode(' | ', $docs['subject']) : $docs['subject'];
+        $implodedCreator = (is_array($docs['creator'])) ? implode(', ', $docs['creator']) : $docs['creator'];
 
-	    $my_title = $docs['title'];
-	    $my_link  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid."";
-	    $my_description  = $implodedSubs;
+	    $sentData['my_title'] = $docs['title'] ? $docs['title'] : 'No Title information available.';
+	    $sentData['my_link']  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid."";
+        $sentData['date'] = $docs['date'] ? $docs['date'] : 'No published date information available.';
+        $sentData['subjects'] = FALSE;
+        $sentData['creator'] = $implodedCreator ? $implodedCreator : 'No creator information available.';
+        $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? FALSE : $docs['type'] :'No type information available.';
 
-	    $myResult->addHit($my_link, $my_title, $my_description);
+
+	    $myResult->addHit($sentData);
 	}
 
     return $myResult;

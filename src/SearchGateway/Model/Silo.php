@@ -18,6 +18,12 @@ Class Silo  {
 	;
     }
 
+    public function isPlural ($count) {
+      $isPlural['end'] = $count == 1 ? '' : 's';
+      $isPlural['all'] = $count == 1 ? '' : 'All ';
+      return $isPlural;
+    }
+
 }
 
 

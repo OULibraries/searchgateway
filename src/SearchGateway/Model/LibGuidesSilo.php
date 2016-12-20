@@ -38,17 +38,30 @@ Class LibGuidesSilo extends Silo {
 	   manually count/limit
 	*/
 	$myResult->total = count($json);
-        # Process hits
+    $myResult->plural = $this->isPlural($myResult->total);
+    $myResult->topLabel = 'Research Guide';
+
+    # Process hits
 	$i = 0;
+    $noShowArray = array('Internal Guide', 'Course Guide', 'Template Guide');
+    $sentData = array();
+
 	foreach ($json as $key => $value) {
 	    if ($i++ == $limit) break;
+        if ($value['status_label'] != 'Published') continue;
+        if (in_array($value['type_label'], $noShowArray)) continue;
 
-	    $my_title = $value['name'];
-	    $my_link = $value['url'];
-	    $my_description = $value['description'];
+	    $sentData['my_title'] = $value['name'];
+	    $sentData['my_link'] = $value['url'];
+	    $sentData['subjects'] = $value['description'];
+        $sentData['date'] = $value['published'];
+        $sentData['creator'] = FALSE; // $value['owner_id']; uncomment if we want the creator
+        $sentData['type'] = FALSE;
 
-	    $myResult->addHit( $my_link, $my_title, $my_description);
+
+	    $myResult->addHit($sentData);
 	}
+
 	return $myResult;
     }
 

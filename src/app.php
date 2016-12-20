@@ -30,17 +30,26 @@ function searchController(Request $request) {
 
   $needle = preg_replace('/[^\p{L}\p{N}]+/u', '', $needle); // strip out anything that isn't a (unicode) alphanumeric
 
-  $book = FALSE;
+  $option = 'default';
+
   switch ($api) {
     case "primo":
-      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $book, $conf['vid']);
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
       break;
     case "libguides":
       $mySearchApi = new SearchGateway\Model\LibGuidesSilo($conf['libguides_siteid'], $conf['libguides_key']);
       break;
-    case 'primobook':
-      $book = TRUE;
-      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $book, $conf['vid']);
+    case 'primobooks':
+      $option = 'books';
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
+      break;
+    case 'primoshareok':
+      $option = 'share';
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
+      break;
+    case 'collection':
+      $option = 'collection';
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $conf['vid'], $option);
       break;
     default:
         throw new Exception('No valid search!');

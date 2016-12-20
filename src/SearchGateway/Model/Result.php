@@ -11,6 +11,8 @@ Class Result {
     public $query ="";
     public $full ="";
     public $total =0 ;
+    public $plural = []; // The word 'All' and the 's' if plural
+    public $topLabel = '';
     public $hits = []; // [{link, url, description}]
 
     public function __construct() {
@@ -26,7 +28,9 @@ Class Result {
 	$data["source"] = $this->source;
 	$data["query"] = $this->query;
 	$data["full"] = $this->full;
-	$data["total"] = $this->total;
+	$data["total"] = number_format($this->total);
+    $data['plural'] = $this->plural;
+    $data['topLabel'] = $this->topLabel;
 	$data["hits"] = $this->hits;
 	return $data;
     }
@@ -35,9 +39,12 @@ Class Result {
      * Adds a ($link, $title, $description) tuple to the list of hits
      * in this search result.
      */
-    public function addHit( $link, $title, $description) {
-	$this->hits[] =  [ 'link' => $link,
-			   'title' => $title,
-			   'text' => $description];
+    public function addHit($sentData) {
+	$this->hits[] =  [ 'link' => $sentData['my_link'],
+			   'title' => $sentData['my_title'],
+			   'text' => $sentData['subjects'],
+               'date' => $sentData['date'],
+               'creator' => $sentData['creator'],
+               'type' => $sentData['type']];
     }
 }
