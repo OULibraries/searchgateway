@@ -34,21 +34,22 @@ function searchController(Request $request) {
 
   switch ($api) {
     case "primo":
-      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $option, $conf['vid']);
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
       break;
     case "libguides":
       $mySearchApi = new SearchGateway\Model\LibGuidesSilo($conf['libguides_siteid'], $conf['libguides_key']);
       break;
     case 'primobooks':
       $option = 'books';
-      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $option, $conf['vid']);
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
       break;
     case 'primoshareok':
-      $mySearchApi = new SearchGateway\Model\ShareOKSilo($conf['primo_host'], $conf['primo_key'], $conf['vid']);
+      $option = 'share';
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'], $conf['primo_key'], $conf['vid'], $option);
       break;
     case 'collection':
       $option = 'collection';
-      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $option, $conf['vid']);
+      $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $conf['vid'], $option);
       break;
     default:
         throw new Exception('No valid search!');

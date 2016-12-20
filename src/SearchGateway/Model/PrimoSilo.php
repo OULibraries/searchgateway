@@ -7,21 +7,23 @@ namespace SearchGateway\Model;
  */
 Class PrimoSilo extends Silo {
 
-  public function __construct($primoHost, $primoKey, $option, $vid) {
+  public function __construct($primoHost, $primoKey, $vid, $option) {
     parent::__construct();
     $this->primoHost = $primoHost;
     $this->primoKey = $primoKey;
-    $this->primoBook = $option;
+    $this->primoOption = $option;
     $this->vid = $vid;
+    $this->collections = array();
   }
 
   /*
    * Get a Result from Primo
    */
   public function getResult($query, $limit) {
+    $this->collections = ['Bass Collection', 'Boorstin Collection'];
 
     #only set this is it is for 'books only'
-    $bookSearchArg = ($this->primoBook != 'default') ? '&mode=advanced' : '';
+    $bookSearchArg = ($this->primoOption != 'default') ? '&mode=advanced' : '';
 
     $myResult = new Result();
     $myResult->source = "primo";
@@ -41,21 +43,29 @@ Class PrimoSilo extends Silo {
     $primoQuery['scope'] = 'default_scope'; //range of types to return...default is everything
     $primoQuery['addfields'] = ['pnxId']; //specific identifier for individual records
     $primoQuery['view'] = 'full'; //view = full will return everything...including the subject or description
-
+error_log($this->primoOption);
     #if this is 'books only' then we need to set that facet type
-    if ($this->primoBook == 'books') {
-      $primoQuery['qInclude'] = 'facet_rtype,exact,books';
-      $myResult->source = "primobooks";
-      $myResult->topLabel = 'Book';
+    switch ($this->primoOption) {
+      case 'books':
+        $primoQuery['qInclude'] = 'facet_rtype,exact,books';
+        $myResult->source = "primobooks";
+        $myResult->topLabel = 'Book';
+        break;
+      case 'collection':
+        $primoQuery['qInclude'] = 'facet_local6,exact,special_collections';
+        $myResult->source = 'collection';
+        $myResult->topLabel = 'Special Collection';
+        break;
+      case 'share':
+        $primoQuery['scope'] = 'ou_dspace';
+        $myResult->source = 'share';
+        $myResult->topLabel = 'SHAREOK Article';
+        break;
+      default:
+        $myResult->topLabel = 'Article';
+        break;
     }
-    elseif ($this->primoBook == 'collection') {
-      $primoQuery['qInclude'] = 'facet_local5,exact,Bass Collection';
-      $myResult->source = 'collection';
-      $myResult->topLabel = 'Special Collection';
-    }
-    else {
-      $myResult->topLabel = 'Article';
-    }
+error_log($primoQuery); error_log($primoQuery['qInclude']);
     $primoResponse = $this->client->send($primoRequest);
     $primoJson = $primoResponse->json();
 
