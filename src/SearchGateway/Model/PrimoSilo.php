@@ -84,9 +84,8 @@ Class PrimoSilo extends Silo {
         $sentData['date'] = $docs['date'] ? $docs['date'] : 'No published date information available.';
         $sentData['subjects'] = FALSE;
         $sentData['creator'] = $implodedCreator ? $implodedCreator : 'No creator information available.';
-        $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? FALSE : $docs['type'] :'No type information available.';
-
-
+        $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? 'book' : $docs['type'] :'No type information available.';
+      
 	    $myResult->addHit($sentData);
 	}
 
