@@ -85,7 +85,7 @@ Class PrimoSilo extends Silo {
         $sentData['subjects'] = FALSE;
         $sentData['creator'] = $implodedCreator ? $implodedCreator : 'No creator information available.';
         $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? 'book' : $docs['type'] :'No type information available.';
-      
+
 	    $myResult->addHit($sentData);
 	}
 

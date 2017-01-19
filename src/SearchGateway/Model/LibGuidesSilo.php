@@ -56,7 +56,7 @@ Class LibGuidesSilo extends Silo {
 	    $sentData['subjects'] = $value['description'];
         $sentData['date'] = $value['published'];
         $sentData['creator'] = FALSE; // $value['owner_id']; uncomment if we want the creator
-        $sentData['type'] = FALSE;
+        $sentData['type'] = 'guide';
 
 
 	    $myResult->addHit($sentData);
