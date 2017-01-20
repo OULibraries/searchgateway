@@ -51,7 +51,7 @@ function searchController(Request $request) {
       $option = 'collection';
       $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $conf['vid'], $option);
       break;
-    case 'web':
+    case 'site':
         $mySearchApi = new SearchGateway\Model\SolrSilo($conf);
         break;
   default:
