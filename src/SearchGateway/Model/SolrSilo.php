@@ -6,7 +6,7 @@ namespace SearchGateway\Model;
  * Each search backend should be defined as a subclass of Silo, with
  * common functionality extracted to this base class as it emerges.
  */
-Class SolrSilo  {
+Class SolrSilo extends Silo  {
 
     public function __construct($conf) 
     {
@@ -49,6 +49,7 @@ Class SolrSilo  {
 
         $myResult->total = $resultSet->getNumFound();
         $myResult->plural = $this->isPlural($myResult->total);
+        $myResult->topLabel = 'Page';
 
         foreach( $resultSet as $doc)
         {
@@ -56,7 +57,7 @@ Class SolrSilo  {
             $sentData['my_title'] = $doc->label;
             $sentData['my_link']  = $doc->url;
             $sentData['subjects'] = $doc->teaser;
-            $sentData['type'] = $doc->bundle;
+            $sentData['type'] = "website";
             $myResult->addHit($sentData);
         }
         return $myResult;
