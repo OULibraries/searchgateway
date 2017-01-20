@@ -28,7 +28,7 @@ function searchController(Request $request) {
   $limit  = isset($params["n"]) && ctype_digit($params["n"]) ? $params["n"] : "5";  // number of results requested
   $needle = isset($params["q"]) ? $params["q"] : "";  // query needle
 
-  $needle = preg_replace('/[^\p{L}\p{N}]+/u', '', $needle); // strip out anything that isn't a (unicode) alphanumeric
+  $needle = preg_replace('/[^\p{L}\p{N} ]+/u', '', $needle); // strip out anything that isn't a (unicode) alphanumeric
 
   $option = 'default';
 
