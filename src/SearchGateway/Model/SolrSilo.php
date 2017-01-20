@@ -56,7 +56,7 @@ Class SolrSilo extends Silo  {
             $sentData = array();
             $sentData['my_title'] = $doc->label;
             $sentData['my_link']  = $doc->url;
-            $sentData['subjects'] = $doc->teaser;
+            $sentData['subjects'] = "";
             $sentData['type'] = "website";
             $myResult->addHit($sentData);
         }
