@@ -21,6 +21,8 @@ Class SolrSilo  {
                     "path"    => $conf['solr_path'], 
                     "core"    => $conf['solr_core'],
                 ) ) );
+        $this->drupal_base = $conf['solr_drupal'];
+
     }
 
     public function getResult ( $query, $limit){
@@ -28,7 +30,7 @@ Class SolrSilo  {
         $myResult = new Result();
         $myResult->source = "web";
         $myResult->query = $query;
-        $myResult->full = "TBD";
+        $myResult->full = $this->drupal_base."/".$query;
 
         // Setup Curl Connection and allow insecure certs
         $client = new \Solarium\Client($this->config);
@@ -46,6 +48,7 @@ Class SolrSilo  {
         $resultSet = $client->select($query);
 
         $myResult->total = $resultSet->getNumFound();
+        $myResult->plural = $this->isPlural($myResult->total);
 
         foreach( $resultSet as $doc)
         {
