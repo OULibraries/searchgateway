@@ -2,12 +2,14 @@
     "require": {
         "silex/silex": "~2.0",
         "guzzlehttp/guzzle": "~5.0",
-        "twig/twig": "^1.27"
+        "twig/twig": "^1.27",
+	"solarium/solarium": "~3.7.0"
     },
 
     "autoload": {
         "psr-4": {
-            "SearchGateway\\Model\\": "src/SearchGateway/Model/"
+            "SearchGateway\\Model\\": "src/SearchGateway/Model/",
+            "SearchGateway\\Util\\": "src/SearchGateway/Util/"
         }
     }
 }
