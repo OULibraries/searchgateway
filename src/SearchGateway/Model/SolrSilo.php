@@ -6,7 +6,7 @@ namespace SearchGateway\Model;
  * Each search backend should be defined as a subclass of Silo, with
  * common functionality extracted to this base class as it emerges.
  */
-Class SolrSilo  {
+Class SolrSilo extends Silo  {
 
     public function __construct($conf) 
     {
@@ -21,6 +21,8 @@ Class SolrSilo  {
                     "path"    => $conf['solr_path'], 
                     "core"    => $conf['solr_core'],
                 ) ) );
+        $this->drupal_base = $conf['solr_drupal'];
+
     }
 
     public function getResult ( $query, $limit){
@@ -28,7 +30,7 @@ Class SolrSilo  {
         $myResult = new Result();
         $myResult->source = "web";
         $myResult->query = $query;
-        $myResult->full = "TBD";
+        $myResult->full = $this->drupal_base."/".$query;
 
         // Setup Curl Connection and allow insecure certs
         $client = new \Solarium\Client($this->config);
@@ -46,6 +48,8 @@ Class SolrSilo  {
         $resultSet = $client->select($query);
 
         $myResult->total = $resultSet->getNumFound();
+        $myResult->plural = $this->isPlural($myResult->total);
+        $myResult->topLabel = 'Page';
 
         foreach( $resultSet as $doc)
         {
@@ -53,7 +57,7 @@ Class SolrSilo  {
             $sentData['my_title'] = $doc->label;
             $sentData['my_link']  = $doc->url;
             $sentData['subjects'] = $doc->teaser;
-            $sentData['type'] = $doc->bundle;
+            $sentData['type'] = "website";
             $myResult->addHit($sentData);
         }
         return $myResult;
