@@ -52,7 +52,7 @@ function searchController(Request $request) {
       $mySearchApi = new SearchGateway\Model\PrimoSilo($conf['primo_host'],$conf['primo_key'], $conf['vid'], $option);
       break;
     case 'web':
-        $mySearchApi = new SearchGateway\Model\SolrSilo();
+        $mySearchApi = new SearchGateway\Model\SolrSilo($conf);
         break;
   default:
       throw new Exception('No valid search!');
