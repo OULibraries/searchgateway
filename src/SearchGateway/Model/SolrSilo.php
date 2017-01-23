@@ -25,32 +25,48 @@ Class SolrSilo extends Silo  {
 
     }
 
-    public function getResult ( $query, $limit){
+    public function getResult ( $needle, $limit){
 
         $myResult = new Result();
         $myResult->source = "web";
-        $myResult->query = $query;
-        $myResult->full = $this->drupal_base."/".$query;
+        $myResult->query = $needle;
+        $myResult->full = $this->drupal_base."/".$needle;
 
         // Setup Curl Connection and allow insecure certs
         $client = new \Solarium\Client($this->config);
         $client->setAdapter('\SearchGateway\Util\InsecureCurl');
 
-        // Try to match Drupal's query settings
-        $selectOpts=array(
-            "minimummatch" => "1"
-        );
-        $query = $client->createSelect($selectOpts);
-        $edismax = $query->getEDisMax();
 
-        $query->setQuery($query);
+        $selectOpts = array(
+            "query" => $needle,
+            "fields" => array("id","entity_id","entity_type","bundle","bundle_name","label","ss_language","is_comment_count","ds_created","ds_changed","score","path","url","is_uid","tos_name","hash","site"),
+            
+        );
+
+        $query = $client->createSelect($selectOpts);
+
+        // Match the Drupal settings fairly closely
+        $edismax = $query->getEDisMax();  // emable EDisMax 
+        $edismax->setMinimumMatch("1");
+        $edismax->setPhraseFields("content^2.0");
+        $edismax->setQueryFields(
+            "content^40 label^5.0 tags_h1^5.0 tags_h2_h3^3.0 "  
+            ."tags_h4_h5_h6^2.0 tags_inline^1.0 taxonomy_names^2.0 "
+            ."tos_content_extra^0.1 tos_name^3.0"
+        );
+
+        // Hide users from content search
+        $query->createFilterQuery('hideUsers')->setQuery('-bundle_name:User'); 
+
+        $query->setQuery($needle);
         $query->setRows($limit);
+
         $resultSet = $client->select($query);
 
         $myResult->total = $resultSet->getNumFound();
         $myResult->plural = $this->isPlural($myResult->total);
         $myResult->topLabel = 'Page';
-
+        
         foreach( $resultSet as $doc)
         {
             $sentData = array();
