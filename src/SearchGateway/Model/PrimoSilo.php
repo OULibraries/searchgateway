@@ -22,13 +22,11 @@ Class PrimoSilo extends Silo {
   public function getResult($query, $limit) {
     $this->collections = ['Bass Collection', 'Boorstin Collection'];
 
-    #only set this is it is for 'books only'
-    $bookSearchArg = ($this->primoOption != 'default') ? '&mode=advanced' : '';
-
     $myResult = new Result();
     $myResult->source = "primo";
     $myResult->query = $query;
-    $myResult->full = "//ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . $bookSearchArg . "&search_scope=default_scope&vid=" . $this->vid . "&sortby=rank";
+    $facet = '';
+    $searchScope = 'default_scope';
 
 
     # Do primo search
@@ -48,16 +46,19 @@ Class PrimoSilo extends Silo {
     switch ($this->primoOption) {
       case 'books':
         $primoQuery['qInclude'] = 'facet_rtype,exact,books';
+        $facet = 'rtype,include,books';
         $myResult->source = "primobooks";
         $myResult->topLabel = 'Book';
         break;
       case 'collection':
         $primoQuery['qInclude'] = 'facet_local6,exact,special_collections';
+        $facet = 'local6,include,special_collections';
         $myResult->source = 'collection';
         $myResult->topLabel = 'Special Collection';
         break;
       case 'share':
         $primoQuery['scope'] = 'ou_dspace';
+        $searchScope = 'ou_dspace';
         $myResult->source = 'share';
         $myResult->topLabel = 'SHAREOK Article';
         break;
@@ -66,6 +67,7 @@ Class PrimoSilo extends Silo {
         break;
     }
 
+    $myResult->full = "//ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . "&facet=" . $facet . "&search_scope=" . $searchScope . "&vid=" . $this->vid . "&sortby=rank";
     $primoResponse = $this->client->send($primoRequest);
     $primoJson = $primoResponse->json();
 
