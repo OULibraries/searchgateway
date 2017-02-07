@@ -64,6 +64,7 @@ Class PrimoSilo extends Silo {
         break;
       default:
         $myResult->topLabel = 'Article';
+        $primoQuery['qExclude'] = 'facet_rtype,exact,books';
         break;
     }
 
