@@ -6,7 +6,7 @@ namespace SearchGateway\Model;
  * Each search backend should be defined as a subclass of Silo, with
  * common functionality extracted to this base class as it emerges.
  */
-class SolrSilo extends Silo  {
+class DrupalSilo extends Silo  {
 
   public function __construct( $conf, $option) {
     $this->config = array(

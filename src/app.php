@@ -53,15 +53,15 @@ function searchController(Request $request) {
       break;
     case 'eresource':
       $option = 'eresource';
-      $mySearchApi = new SearchGateway\Model\SolrSilo($conf, $option);
+      $mySearchApi = new SearchGateway\Model\DrupalSilo($conf, $option);
       break;
     case 'site':
       $option="site";
-      $mySearchApi = new SearchGateway\Model\SolrSilo($conf, $option);
+      $mySearchApi = new SearchGateway\Model\DrupalSilo($conf, $option);
       break;
     case 'people':
       $option="people";
-      $mySearchApi = new SearchGateway\Model\SolrSilo($conf, $option);
+      $mySearchApi = new SearchGateway\Model\DrupalSilo($conf, $option);
       break;
     default:
       throw new Exception('No valid search!');
