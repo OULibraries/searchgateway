@@ -43,7 +43,7 @@ Class Result {
     $this->hits[] =  [
       'link' => $sentData['my_link'],
       'title' => $sentData['my_title'],
-      'text' => $sentData['subjects'],
+      'text' => $sentData['text'],
       'date' => $sentData['date'],
       'creator' => $sentData['creator'],
       'image' => $sentData['image'],

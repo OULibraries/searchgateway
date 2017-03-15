@@ -97,7 +97,7 @@ class DrupalSilo extends Silo  {
         $sentData = array();
         $sentData['my_title'] = $doc->label;
         $sentData['my_link']  = $doc->url;
-        $sentData['subjects'] = $doc->$textField;
+        $sentData['text'] = $doc->$textField;
         $sentData['type'] = $doc->bundle_name;
         $sentData['image'] = $doc->sm_picture[0];
         $myResult->addHit($sentData);

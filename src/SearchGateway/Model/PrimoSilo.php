@@ -86,7 +86,7 @@ Class PrimoSilo extends Silo {
 	    $sentData['my_title'] = $docs['title'] ? $docs['title'] : 'No Title information available.';
 	    $sentData['my_link']  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid."";
         $sentData['date'] = $docs['date'] ? $docs['date'] : 'No published date information available.';
-        $sentData['subjects'] = FALSE;
+        $sentData['text'] = FALSE;
         $sentData['creator'] = $implodedCreator ? $implodedCreator : 'No creator information available.';
         $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? 'book' : $docs['type'] :'No type information available.';
 
