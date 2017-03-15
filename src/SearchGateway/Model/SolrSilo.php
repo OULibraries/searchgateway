@@ -68,8 +68,8 @@ class SolrSilo extends Silo  {
         break;
 
       case "people":
-        // Show only people
-        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user');
+        // Show only people with titles
+        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
         break;
       default:
         // Hide eresources and people from web search
