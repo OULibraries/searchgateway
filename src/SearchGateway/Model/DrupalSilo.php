@@ -42,7 +42,8 @@ class DrupalSilo extends Silo  {
       "fields" => array("id","entity_id","entity_type","bundle",
                 "bundle_name","label","ss_language","is_comment_count",
                 "ds_created","ds_changed","score","path","url","is_uid",
-                "tos_name","hash","site", "sm_field_one_sentence_teaser"),
+                "tos_name","hash","site", "sm_field_one_sentence_teaser",
+                "ts_title", "sm_picture" ),
 
     );
 
@@ -59,6 +60,8 @@ class DrupalSilo extends Silo  {
       ."tos_content_extra^0.1 tos_name^3.0"
     );
 
+    $textField="sm_field_one_sentence_teaser";
+
 
     // Which kind of thing are we searching for?
     switch ($this->option) {
@@ -70,7 +73,9 @@ class DrupalSilo extends Silo  {
       case "people":
         // Show only people with titles
         $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
+        $textField="ts_title";
         break;
+
       default:
         // Hide eresources and people from web search
         $query->createFilterQuery('hideE')->setQuery('-bundle:eresources');
@@ -92,8 +97,9 @@ class DrupalSilo extends Silo  {
         $sentData = array();
         $sentData['my_title'] = $doc->label;
         $sentData['my_link']  = $doc->url;
-        $sentData['subjects'] = $doc->sm_field_one_sentence_teaser;
+        $sentData['subjects'] = $doc->$textField;
         $sentData['type'] = $doc->bundle_name;
+        $sentData['image'] = $doc->sm_picture[0];
         $myResult->addHit($sentData);
       }
     return $myResult;

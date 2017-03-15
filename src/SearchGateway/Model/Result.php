@@ -40,11 +40,14 @@ Class Result {
    * in this search result.
    */
   public function addHit($sentData) {
-    $this->hits[] =  [ 'link' => $sentData['my_link'],
-                     'title' => $sentData['my_title'],
-                     'text' => $sentData['subjects'],
-                     'date' => $sentData['date'],
-                     'creator' => $sentData['creator'],
-                     'type' => $sentData['type']];
+    $this->hits[] =  [
+      'link' => $sentData['my_link'],
+      'title' => $sentData['my_title'],
+      'text' => $sentData['subjects'],
+      'date' => $sentData['date'],
+      'creator' => $sentData['creator'],
+      'image' => $sentData['image'],
+      'type' => $sentData['type']
+    ];
   }
 }
