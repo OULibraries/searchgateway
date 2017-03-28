@@ -41,13 +41,13 @@ Class Result {
    */
   public function addHit($sentData) {
     $this->hits[] =  [
-      'link' => $sentData['my_link'],
-      'title' => $sentData['my_title'],
-      'text' => $sentData['text'],
-      'date' => $sentData['date'],
-      'creator' => $sentData['creator'],
-      'image' => $sentData['image'],
-      'type' => $sentData['type']
+      'link' => $sentData['my_link']  ?: false,
+      'title' => $sentData['my_title']  ?: false,
+      'text' => $sentData['text']  ?: false,
+      'date' => $sentData['date']  ?: false ,
+      'creator' => $sentData['creator'] ?: false,
+      'image' => $sentData['image'] ?: false,
+      'type' => $sentData['type']  ?: false
     ];
   }
 }
