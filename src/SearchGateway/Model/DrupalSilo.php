@@ -70,6 +70,8 @@ class DrupalSilo extends Silo  {
         // Show only people with titles
         $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
+        // HACK people results are big, so we count each one as two results 
+        $limit = ceil($limit/2);
         break;
 
       default:
