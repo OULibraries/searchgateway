@@ -41,8 +41,7 @@ class DrupalSilo extends Silo  {
                 "bundle_name","label","ss_language","is_comment_count",
                 "ds_created","ds_changed","score","path","url","is_uid",
                 "tos_name","hash","site", "sm_field_one_sentence_teaser",
-                "ts_title", "sm_picture" ),
-
+                "ts_title", "sm_vid_Resources_by_Subject", "ss_picture" ),
     );
 
     $query = $client->createSelect($selectOpts);
@@ -70,7 +69,6 @@ class DrupalSilo extends Silo  {
       case "people":
         // Show only people with titles
         $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
-        $textField="ts_title";
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
         break;
 
@@ -90,16 +88,29 @@ class DrupalSilo extends Silo  {
     $myResult->plural = $this->isPlural($myResult->total);
     $myResult->topLabel = 'Page';
 
-    foreach( $resultSet as $doc)
-      {
-        $sentData = array();
-        $sentData['my_title'] = $doc->label;
-        $sentData['my_link']  = $doc->url;
-        $sentData['text'] = $doc->$textField;
-        $sentData['type'] = $doc->bundle_name;
-        $sentData['image'] = $doc->sm_picture[0];
-        $myResult->addHit($sentData);
+    foreach( $resultSet as $doc) {
+      // build basic hit to add to result set
+      $sentData = array();
+      $sentData['my_title'] = $doc->label;
+      $sentData['my_link']  = $doc->url;
+      $sentData['text'] = $doc->sm_field_one_sentence_teaser;
+      $sentData['type'] = $doc->bundle_name;
+      $sentData['image'] = $doc->sm_picture[0];
+
+      // Override some fields for special cases
+      switch ($this->option) {
+        case "eresource":
+          break;
+        case "people":
+          $sentData['text'] = $doc->ts_title;
+          $sentData['type'] = "false";
+          break;
+        default:
+          ;
       }
+
+      $myResult->addHit($sentData);
+    }
     return $myResult;
   }
 }
