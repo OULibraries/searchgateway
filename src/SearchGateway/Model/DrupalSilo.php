@@ -22,7 +22,6 @@ class DrupalSilo extends Silo  {
         ) ) );
     $this->drupal_base = $conf['solr_drupal'];
     $this->option = $option;
-
   }
 
   public function getResult ( $needle, $limit) {
@@ -30,12 +29,11 @@ class DrupalSilo extends Silo  {
     $myResult = new Result();
     $myResult->source = "web";
     $myResult->query = $needle;
-    #$myResult->full = $this->drupal_base."/".$needle;
+
 
     // Setup Curl Connection and allow insecure certs
     $client = new \Solarium\Client($this->config);
     $client->setAdapter('\SearchGateway\Util\InsecureCurl');
-
 
     $selectOpts = array(
       "query" => $needle,
@@ -49,7 +47,6 @@ class DrupalSilo extends Silo  {
 
     $query = $client->createSelect($selectOpts);
 
-
     // enable EDisMax query parsing and match the Drupal search settings
     $edismax = $query->getEDisMax();
     $edismax->setMinimumMatch("1");
@@ -62,26 +59,27 @@ class DrupalSilo extends Silo  {
 
     $textField="sm_field_one_sentence_teaser";
 
-
     // Which kind of thing are we searching for?
     switch ($this->option) {
       case "eresource":
         // Show only eresources
         $query->createFilterQuery('onlyE')->setQuery('+bundle:eresources');
+        $myResult->full = $this->drupal_base."/search/eresources/".$needle;
         break;
 
       case "people":
         // Show only people with titles
         $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
         $textField="ts_title";
+        $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
         break;
 
       default:
         // Hide eresources and people from web search
         $query->createFilterQuery('hideE')->setQuery('-bundle:eresources');
         $query->createFilterQuery('hideUsers')->setQuery('-bundle:user');
+        $myResult->full = $this->drupal_base."/search/site-pages/".$needle;
     }
-
 
     $query->setQuery($needle);
     $query->setRows($limit);
@@ -98,10 +96,19 @@ class DrupalSilo extends Silo  {
         $sentData['my_title'] = $doc->label;
         $sentData['my_link']  = $doc->url;
         $sentData['text'] = $doc->$textField;
-        $sentData['type'] = $doc->bundle_name;
+        $sentData['type'] = $this->_getType($doc->bundle);
         $sentData['image'] = $doc->sm_picture[0];
         $myResult->addHit($sentData);
       }
     return $myResult;
   }
+
+  private function _getType( $bundle) {
+    $resultType="web page";
+    if( "event" == $bundle) {
+      $resultType = "event";
+    }
+    return $resultType;
+  }
+
 }
