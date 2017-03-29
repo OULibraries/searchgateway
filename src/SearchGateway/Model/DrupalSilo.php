@@ -96,19 +96,10 @@ class DrupalSilo extends Silo  {
         $sentData['my_title'] = $doc->label;
         $sentData['my_link']  = $doc->url;
         $sentData['text'] = $doc->$textField;
-        $sentData['type'] = $this->_getType($doc->bundle);
+        $sentData['type'] = $doc->bundle_name;
         $sentData['image'] = $doc->sm_picture[0];
         $myResult->addHit($sentData);
       }
     return $myResult;
   }
-
-  private function _getType( $bundle) {
-    $resultType="web page";
-    if( "event" == $bundle) {
-      $resultType = "event";
-    }
-    return $resultType;
-  }
-
 }
