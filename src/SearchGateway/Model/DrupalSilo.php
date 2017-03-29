@@ -28,6 +28,7 @@ class DrupalSilo extends Silo  {
 
     $myResult = new Result();
     $myResult->source = "web";
+    $myResult->topLabel = 'Page';
     $myResult->query = $needle;
 
 
@@ -72,6 +73,7 @@ class DrupalSilo extends Silo  {
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
         // HACK people results are big, so we count each one as two results 
         $limit = ceil($limit/2);
+        $myResult->topLabel = 'Research Specialist';
         break;
 
       default:
@@ -88,7 +90,7 @@ class DrupalSilo extends Silo  {
 
     $myResult->total = $resultSet->getNumFound();
     $myResult->plural = $this->isPlural($myResult->total);
-    $myResult->topLabel = 'Page';
+
 
     foreach( $resultSet as $doc) {
       // build basic hit to add to result set
@@ -105,7 +107,7 @@ class DrupalSilo extends Silo  {
           break;
         case "people":
           $sentData['text'] = $doc->ts_title;
-          $sentData['type'] = "false";
+          $sentData['type'] = false;
           break;
         default:
           ;
