@@ -95,7 +95,7 @@ class DrupalSilo extends Silo  {
       $sentData['my_link']  = $doc->url;
       $sentData['text'] = $doc->sm_field_one_sentence_teaser;
       $sentData['type'] = $doc->bundle_name;
-      $sentData['image'] = $doc->sm_picture[0];
+      $sentData['image'] = $doc->ss_picture;
 
       // Override some fields for special cases
       switch ($this->option) {
