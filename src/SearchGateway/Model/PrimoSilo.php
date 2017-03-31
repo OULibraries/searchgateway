@@ -69,8 +69,6 @@ Class PrimoSilo extends Silo {
         break;
     }
 
-    $myResult->debug = $primoRequest->getUrl();
-
     $myResult->full = "//ou-primo.hosted.exlibrisgroup.com/primo-explore/search?query=any,contains," . $query . "&facet=" . $facet . "&search_scope=" . $searchScope . "&vid=" . $this->vid . "&sortby=rank";
     $primoResponse = $this->client->send($primoRequest);
     $primoJson = $primoResponse->json();
