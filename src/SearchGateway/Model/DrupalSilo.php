@@ -69,7 +69,7 @@ class DrupalSilo extends Silo  {
 
       case "people":
         // Show only people with titles
-        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND ts_title:*');
+        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND bm_field_searchable:true');
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
         // HACK people results are big, so we count each one as two results 
         $limit = ceil($limit/2);
