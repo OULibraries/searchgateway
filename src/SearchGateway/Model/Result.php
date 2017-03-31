@@ -13,6 +13,7 @@ Class Result {
   public $total =0 ;
   public $plural = []; // The word 'All' and the 's' if plural
   public $topLabel = '';
+  public $debug ='';
   public $hits = []; // [{link, url, description}]
 
   public function __construct() {
@@ -32,6 +33,7 @@ Class Result {
     $data['plural'] = $this->plural;
     $data['topLabel'] = $this->topLabel;
     $data["hits"] = $this->hits;
+    $data["debug"] = $this->debug;
     return $data;
   }
 
@@ -47,7 +49,8 @@ Class Result {
       'date' => $sentData['date']  ?: false ,
       'creator' => $sentData['creator'] ?: false,
       'image' => $sentData['image'] ?: false,
-      'type' => $sentData['type']  ?: false
+      'type' => $sentData['type']  ?: false,
+      'context' => $sentData['context'] ?: false
     ];
   }
 }
