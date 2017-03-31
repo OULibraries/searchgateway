@@ -23,7 +23,6 @@ Class Silo  {
       $isPlural['all'] = $count == 1 ? '' : 'All ';
       return $isPlural;
     }
-
 }
 
 

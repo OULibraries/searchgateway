@@ -48,7 +48,36 @@ Class Result {
       'creator' => $sentData['creator'] ?: false,
       'image' => $sentData['image'] ?: false,
       'type' => $sentData['type']  ?: false,
-      'context' => $sentData['context'] ?: false
+      'context' => $sentData['context'] ?: false,
+      'icon' => self::typeToIcon($sentData['type'])
     ];
   }
+
+  public function typeToIcon ($type) {
+
+    switch ($type){
+      case 'article':
+      case 'audio':
+      case 'book':
+      case 'book_chapter':
+      case 'guide':
+      case 'image':
+      case 'journal':
+      case 'microform':
+      case 'Online resource':
+      case 'Online':
+      case 'Online-resource':
+      case 'Online_resource':
+      case 'reference_entry':
+      case 'Research Guides':
+      case 'score':
+      case 'video':
+      case 'website':
+        return $type;
+        break;
+      default: return 'other';
+    }
+
+  }
+
 }
