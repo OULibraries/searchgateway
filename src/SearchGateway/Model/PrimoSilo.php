@@ -84,11 +84,13 @@ Class PrimoSilo extends Silo {
         $implodedCreator = (is_array($docs['creator'])) ? implode(', ', $docs['creator']) : $docs['creator'];
 
 	    $sentData['my_title'] = $docs['title'] ? $docs['title'] : 'No Title information available.';
-	    $sentData['my_link']  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid."";
+	    $sentData['my_link']  = "https://ou-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=".$docs['pnxId']."&vid=".$this->vid.
+                                "&context=".$docs['context']."";
         $sentData['date'] = $docs['date'] ? $docs['date'] : 'No published date information available.';
         $sentData['text'] = FALSE;
         $sentData['creator'] = $implodedCreator ? $implodedCreator : 'No creator information available.';
         $sentData['type'] = $docs['type'] ? ($docs['type'] == 'book') ? 'book' : $docs['type'] :'No type information available.';
+        $sentData['context'] = $docs['context'] ? $docs['context'] : '';
 
 	    $myResult->addHit($sentData);
 	}

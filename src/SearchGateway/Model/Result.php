@@ -47,7 +47,8 @@ Class Result {
       'date' => $sentData['date']  ?: false ,
       'creator' => $sentData['creator'] ?: false,
       'image' => $sentData['image'] ?: false,
-      'type' => $sentData['type']  ?: false
+      'type' => $sentData['type']  ?: false,
+      'context' => $sentData['context'] ?: false
     ];
   }
 }
