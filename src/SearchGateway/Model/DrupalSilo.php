@@ -43,7 +43,7 @@ class DrupalSilo extends Silo  {
                 "ds_created","ds_changed","score","path","url","is_uid",
                 "tos_name","hash","site", "sm_field_one_sentence_teaser",
                 "ts_title", "sm_vid_Resources_by_Subject", "ss_picture",
-                "sm_vid_E_Resource_Types"),
+                "sm_vid_E_Resource_Types", "sm_field_teaser"),
     );
 
     $query = $client->createSelect($selectOpts);
@@ -101,6 +101,12 @@ class DrupalSilo extends Silo  {
       $sentData['text'] = $doc->sm_field_one_sentence_teaser;
       $sentData['type'] = $doc->bundle_name;
       $sentData['image'] = $doc->ss_picture;
+
+      // better teaser field defined for some content types 
+      // we'll eventuall switch to it everywhere
+      if( isset($doc->sm_field_teaser) ) {
+          $sentData['text'] = $doc->sm_field_teaser;
+      }
 
       // Override some fields for special cases
       switch ($this->option) {
