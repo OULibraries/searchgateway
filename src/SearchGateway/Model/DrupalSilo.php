@@ -66,6 +66,9 @@ class DrupalSilo extends Silo  {
         // Show only eresources
         $query->createFilterQuery('onlyE')->setQuery('+bundle:eresources');
         $myResult->full = $this->drupal_base."/search/eresources/".$needle;
+        // double relevance of "Databases" vs other eResources
+        $edismax->setBoostFunctionsMult('if(termfreq(sm_vid_E_Resource_Types,"Database"),2,1)');
+
         break;
 
       case "people":
