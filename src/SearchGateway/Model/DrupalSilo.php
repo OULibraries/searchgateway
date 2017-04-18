@@ -105,9 +105,9 @@ class DrupalSilo extends Silo  {
       $sentData['type'] = $doc->bundle_name;
       $sentData['image'] = $doc->ss_picture;
 
-      // better teaser field defined for some content types 
-      // we'll eventuall switch to it everywhere
-      if( isset($doc->sm_field_teaser) ) {
+      // teaser field defined for some content types 
+      // we'll use our custom one, one less it's emppty and the otehr one is set. 
+      if( empty($sentData['text']) and isset($doc->sm_field_teaser) ) {
           $sentData['text'] = $doc->sm_field_teaser;
       }
 
