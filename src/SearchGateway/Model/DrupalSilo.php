@@ -42,7 +42,8 @@ class DrupalSilo extends Silo  {
                 "bundle_name","label","ss_language","is_comment_count",
                 "ds_created","ds_changed","score","path","url","is_uid",
                 "tos_name","hash","site", "sm_field_one_sentence_teaser",
-                "ts_title", "sm_vid_Resources_by_Subject", "ss_picture" ),
+                "ts_title", "sm_vid_Resources_by_Subject", "ss_picture",
+                "sm_vid_E_Resource_Types", "sm_field_teaser"),
     );
 
     $query = $client->createSelect($selectOpts);
@@ -65,13 +66,16 @@ class DrupalSilo extends Silo  {
         // Show only eresources
         $query->createFilterQuery('onlyE')->setQuery('+bundle:eresources');
         $myResult->full = $this->drupal_base."/search/eresources/".$needle;
+        // double relevance of "Databases" vs other eResources
+        $edismax->setBoostFunctionsMult('if(termfreq(sm_vid_E_Resource_Types,"Database"),2,1)');
+
         break;
 
       case "people":
         // Show only people with titles
         $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND bm_field_searchable:true');
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
-        // HACK people results are big, so we count each one as two results 
+        // HACK people results are big, so we count each one as two results
         $limit = ceil($limit/2);
         $myResult->topLabel = 'Research Specialist';
         break;
@@ -101,9 +105,16 @@ class DrupalSilo extends Silo  {
       $sentData['type'] = $doc->bundle_name;
       $sentData['image'] = $doc->ss_picture;
 
+      // better teaser field defined for some content types 
+      // we'll eventuall switch to it everywhere
+      if( isset($doc->sm_field_teaser) ) {
+          $sentData['text'] = $doc->sm_field_teaser;
+      }
+
       // Override some fields for special cases
       switch ($this->option) {
         case "eresource":
+          $sentData['type'] = in_array( "Database", $doc->sm_vid_E_Resource_Types) ? "Database" : "E-Resource";
           break;
         case "people":
           $sentData['text'] = $doc->ts_title;
