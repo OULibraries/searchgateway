@@ -43,7 +43,9 @@ class DrupalSilo extends Silo  {
                 "ds_created","ds_changed","score","path","url","is_uid",
                 "tos_name","hash","site", "sm_field_one_sentence_teaser",
                 "ts_title", "sm_vid_Resources_by_Subject", "ss_picture",
-                "sm_vid_E_Resource_Types", "sm_field_teaser"),
+                "sm_vid_E_Resource_Types", "sm_field_teaser", "tm_specialties",
+                "ss_field_description",
+      )
     );
 
     $query = $client->createSelect($selectOpts);
@@ -55,7 +57,7 @@ class DrupalSilo extends Silo  {
     $edismax->setQueryFields(
       "content^40 label^5.0 tags_h1^5.0 tags_h2_h3^3.0 "
       ."tags_h4_h5_h6^2.0 tags_inline^1.0 taxonomy_names^2.0 "
-      ."tos_content_extra^0.1 tos_name^3.0"
+      ."tos_content_extra^0.1 tos_name^3.0 tm_specialties"
     );
 
     $textField="sm_field_one_sentence_teaser";
@@ -73,7 +75,7 @@ class DrupalSilo extends Silo  {
 
       case "people":
         // Show only people with titles
-        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND bm_field_searchable:true');
+        $query->createFilterQuery('onlyUsers')->setQuery('+bundle:user AND bs_field_searchable:true');
         $myResult->full = $this->drupal_base."/search/research-specialists/".$needle;
         // HACK people results are big, so we count each one as two results
         $limit = ceil($limit/2);
@@ -115,6 +117,7 @@ class DrupalSilo extends Silo  {
       switch ($this->option) {
         case "eresource":
           $sentData['type'] = in_array( "Database", $doc->sm_vid_E_Resource_Types) ? "Database" : "E-Resource";
+          $sentData['text'] = $doc->ss_field_description;
           break;
         case "people":
           $sentData['text'] = $doc->ts_title;
