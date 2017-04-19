@@ -43,7 +43,9 @@ class DrupalSilo extends Silo  {
                 "ds_created","ds_changed","score","path","url","is_uid",
                 "tos_name","hash","site", "sm_field_one_sentence_teaser",
                 "ts_title", "sm_vid_Resources_by_Subject", "ss_picture",
-                "sm_vid_E_Resource_Types", "sm_field_teaser", "tm_specialties"),
+                "sm_vid_E_Resource_Types", "sm_field_teaser", "tm_specialties",
+                "ss_field_description",
+      )
     );
 
     $query = $client->createSelect($selectOpts);
@@ -115,6 +117,7 @@ class DrupalSilo extends Silo  {
       switch ($this->option) {
         case "eresource":
           $sentData['type'] = in_array( "Database", $doc->sm_vid_E_Resource_Types) ? "Database" : "E-Resource";
+          $sentData['text'] = $doc->ss_field_description;
           break;
         case "people":
           $sentData['text'] = $doc->ts_title;
