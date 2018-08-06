@@ -1,7 +1,5 @@
 # Search Gateway
 
-Almost exists.
-
 This is an API Gateway that provides a unified, simplistic, cacheable
 interface to the multifarious content search backends used at OU
 Libraries. It's primarily intended to provide "Top 5 Hits" style
