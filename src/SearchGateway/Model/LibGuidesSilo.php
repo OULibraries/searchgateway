@@ -38,13 +38,13 @@ Class LibGuidesSilo extends Silo {
 	   manually count/limit
 	*/
 	$myResult->total = count($json);
-    $myResult->plural = $this->isPlural($myResult->total);
-    $myResult->topLabel = 'Research Guide';
+        $myResult->plural = $this->isPlural($myResult->total);
+        $myResult->topLabel = 'Research Guide';
 
-    # Process hits
+        # Process hits
 	$i = 0;
-    $noShowArray = array('Internal Guide', 'Course Guide', 'Template Guide');
-    $sentData = array();
+        $noShowArray = array('Internal Guide', 'Course Guide', 'Template Guide');
+        $sentData = array();
 
 	foreach ($json as $key => $value) {
 	    if ($i++ == $limit) break;
